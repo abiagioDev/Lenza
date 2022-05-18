@@ -45,10 +45,14 @@ public:
     void printOnNotes();
     void printNoteName(int note);
     void sortNotes();
+    void majMin();
+    
 private:
     
     //Array that stores information for each note/circle being displayed
     NoteData noteData[MAX_NUM_OF_NOTES];
+    
+    int onNotes; //numero delle note accese
     
     //Variable for storing the apps background colour
     int backgroundColour;

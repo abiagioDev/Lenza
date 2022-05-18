@@ -16,60 +16,10 @@ void ofApp::setup(){
         noteData[i].status = OFF;
         noteData[i].note_num = 128;
     }
-}
-
-
-void ofApp::newMidiMessage (ofxMidiMessage& msg)
-{
-    //if we have received a note-on message
-    if (msg.status == MIDI_NOTE_ON && msg.velocity != 0)
-    {
-        for (int i = 0; i < MAX_NUM_OF_NOTES; i++)
-        {
-            if (noteData[i].status == OFF)
-            {
-                noteData[i].status = ON;
-                noteData[i].note_num = msg.pitch;
-                noteData[i].note_vel = msg.velocity;
-                
-                cout << "Added ON NOTE :" ;
-                cout <<"Velocity: "<<msg.velocity<<endl;
-                cout <<"Pitch: "<<msg.pitch<<endl;
-                break;
-            }
-        }
-    } else if(msg.status == MIDI_NOTE_OFF){
-        
-        for (int i = 0; i < MAX_NUM_OF_NOTES; i++)
-        {
-            if (noteData[i].note_num == msg.pitch)
-            {
-                noteData[i].status = OFF;
-                
-                cout << "TURNED OFF A NOTE :" ;
-                cout <<"Pitch: "<<msg.pitch<<endl;
-                break;
-                
-            }
-            
-        }
-        
-    } else if (msg.status == MIDI_CONTROL_CHANGE){
-        
-        cout<<"Control: "<<msg.control<<endl;
-        cout<<"Value: "<<msg.value<<endl;
-        
-        if(msg.control== 1){
-            control = msg.value;
-        }
-    }
-    
-    printOnNotes();
-    
+    onNotes =0;
 }
 
 void ofApp::printOnNotes(){
-    sortNotes();
     
     cout << endl << "CURRENT ON NOTES: "<<endl;
     for (int i = 0; i < MAX_NUM_OF_NOTES; i++)
@@ -89,6 +39,7 @@ const char *noteBemolleEN[5] = {"Db","Eb","Gb","Ab","Bb"};
 
 
 void ofApp::printNoteName(int note){
+    cout << note << " ";
     switch(note%12){
         case 0:
             cout << "DO" ;
@@ -131,6 +82,31 @@ void ofApp::printNoteName(int note){
     cout << (note/12) -2;
 }
 
+void ofApp::majMin(){
+    int relevantNotes[MAX_NUM_OF_NOTES];
+    int relevants=0;
+    bool found = false;
+    
+    for(int i=0;i<onNotes;i++){
+        
+        for(int j=0;j<relevants;j++){
+            if(relevantNotes[j] == noteData[i].note_num%24){
+                found = true;
+                break;
+            }
+        }
+        if(!found){
+            relevantNotes[relevants++]=noteData[i].note_num%24;
+        }
+    }
+    
+    for(int i=1;i<relevants;i++){
+        cout<<"D"<<i+1<<": "<< relevantNotes[i] - relevantNotes[i-1]<<endl;
+              
+    }
+        
+}
+
 int comp (const NoteData *primaNota, const NoteData *secondaNota) {
     return primaNota->status == OFF || primaNota->note_num > secondaNota->note_num ? 1 : -1;
 }
@@ -139,6 +115,62 @@ void ofApp::sortNotes(){
     qsort(&noteData, sizeof(noteData) / sizeof(NoteData), sizeof(NoteData), (int (*) (const void *, const void *)) &comp);
 }
 
+
+
+void ofApp::newMidiMessage (ofxMidiMessage& msg)
+{
+    //if we have received a note-on message
+    if (msg.status == MIDI_NOTE_ON && msg.velocity != 0)
+    {
+        for (int i = 0; i < MAX_NUM_OF_NOTES; i++)
+        {
+            if (noteData[i].status == OFF)
+            {
+                noteData[i].status = ON;
+                noteData[i].note_num = msg.pitch;
+                noteData[i].note_vel = msg.velocity;
+                
+                onNotes++;
+                
+                cout << "Added ON NOTE :" ;
+                cout <<"Velocity: "<<msg.velocity<<endl;
+                cout <<"Pitch: "<<msg.pitch<<endl;
+                
+                break;
+            }
+        }
+    } else if(msg.status == MIDI_NOTE_OFF){
+        
+        for (int i = 0; i < MAX_NUM_OF_NOTES; i++)
+        {
+            if (noteData[i].note_num == msg.pitch)
+            {
+                noteData[i].status = OFF;
+                
+                onNotes--;
+                
+                cout << "TURNED OFF A NOTE :" ;
+                cout <<"Pitch: "<<msg.pitch<<endl;
+                break;
+                
+            }
+            
+        }
+        
+    } else if (msg.status == MIDI_CONTROL_CHANGE){
+        
+        cout<<"Control: "<<msg.control<<endl;
+        cout<<"Value: "<<msg.value<<endl;
+        
+        if(msg.control== 1){
+            control = msg.value;
+        }
+    }
+    sortNotes();
+
+    printOnNotes();
+    majMin();
+}
 
 //--------------------------------------------------------------
 void ofApp::update(){
