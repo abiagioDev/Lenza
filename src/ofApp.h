@@ -4,6 +4,7 @@
 #include "ofxMidi.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "chords.h"
 
 #define MAX_NUM_OF_NOTES 1000
 
@@ -43,8 +44,7 @@ public:
     void newMidiMessage(ofxMidiMessage& eventArgs);
     
     void printOnNotes();
-    void printNoteName(int note);
-    void sortNotes();
+     void sortNotes();
     void majMin();
     
 private:
