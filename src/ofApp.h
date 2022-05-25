@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include "chords.h"
 #include "music/midilyzer.h"
+#include "drawing/Grid.h"
+
 #define MAX_NUM_OF_NOTES 1000
 
 
@@ -49,6 +51,9 @@ private:
     bool showingInstructions;
     
     int control;
+
+    Grid grid;
+
     
     
 };

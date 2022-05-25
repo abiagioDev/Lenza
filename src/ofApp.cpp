@@ -23,6 +23,11 @@ void ofApp::setup(){
         noteData[i].note_num = 128;
     }
     onNotes =0;
+    
+    
+    grid = Grid();
+    grid.setup();
+    
 }
  
  
@@ -96,7 +101,8 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    
+    grid.display();
+
 }
 
 //--------------------------------------------------------------
