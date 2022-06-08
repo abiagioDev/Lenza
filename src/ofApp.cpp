@@ -116,6 +116,8 @@ void ofApp::update(){
            grayDiff.absDiff(grayBg, grayImage);
            grayDiff.threshold(50);
            grayDiff.erode();
+           grayDiff.erode();
+           grayDiff.dilate();
            contourFinder.findContours(grayDiff, 5, (WIDTH_RES*HEIGHT_RES)/3, 1, false, true);
         
        }
@@ -163,7 +165,9 @@ void ofApp::draw(){
                }
              
                path.close();
-              // path.simplify();
+           path.simplify();
+           path.simplify();
+           path.setColor(c);
            path.draw();
 
 

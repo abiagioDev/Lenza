@@ -61,6 +61,7 @@ private:
     int control;
 
     Grid grid;
+    ofShader shader;
 
     
     
