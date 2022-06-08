@@ -1,6 +1,9 @@
 #include "ofApp.h"
 #include "chords.h"
 
+#define WIDTH_RES 1280
+#define HEIGHT_RES 720
+
 void printArray(int *array,int dim);
 void printChord(int root,CHORD_QUALITY quality);
 void printChordQuality(CHORD_QUALITY quality);
@@ -30,14 +33,15 @@ void ofApp::setup(){
     
     
     bLearnBackground = false;
-
+    
       vidGrabber.setVerbose(true);
-      vidGrabber.initGrabber(320,240);
+    vidGrabber.listDevices();
+      vidGrabber.initGrabber(WIDTH_RES,HEIGHT_RES);
 
-      colorImg.allocate(320,240);
-      grayImage.allocate(320,240);
-      grayBg.allocate(320,240);
-      grayDiff.allocate(320,240);
+      colorImg.allocate(WIDTH_RES,HEIGHT_RES);
+      grayImage.allocate(WIDTH_RES,HEIGHT_RES);
+      grayBg.allocate(WIDTH_RES,HEIGHT_RES);
+      grayDiff.allocate(WIDTH_RES,HEIGHT_RES);
 }
  
 
@@ -109,7 +113,7 @@ void ofApp::update(){
                bLearnBackground = false;
            }
            grayDiff.absDiff(grayBg, grayImage);
-           grayDiff.threshold(30);
+           grayDiff.threshold(40);
            contourFinder.findContours(grayDiff, 5, (340*240)/4, 4, false, true);
        }
     //end tut recognition
@@ -120,18 +124,34 @@ void ofApp::draw(){
     
     grid.display();
     
+    
     ofSetHexColor(0xffffff);
-       colorImg.draw(0, 0, 320, 240);
-       grayDiff.draw(0, 240, 320, 240);
-       ofDrawRectangle(320, 0, 320, 240);
-       contourFinder.draw(320, 0, 320, 240);
+       colorImg.draw(0, 0, WIDTH_RES/3, HEIGHT_RES/3);
+       grayDiff.draw(0, HEIGHT_RES/3, WIDTH_RES/3, HEIGHT_RES/3);
+       ofDrawRectangle(WIDTH_RES/3, 0, WIDTH_RES/3, HEIGHT_RES/3);
+       contourFinder.draw(WIDTH_RES/3, 0, WIDTH_RES/3, HEIGHT_RES/3);
        ofColor c(255, 255, 255);
+    
+    
        for(int i = 0; i < contourFinder.nBlobs; i++) {
-           ofRectangle r = contourFinder.blobs.at(i).boundingRect;
-           r.x += 320; r.y += 240;
+           
+           //contourFinder.blobs.at(i).draw();
+           ofPolyline line;
+        
+           line.addVertices(contourFinder.blobs.at(i).pts);
+           
+//
+//           ofRectangle r = contourFinder.blobs.at(i).boundingRect;
+//           r.x += WIDTH_RES/3; r.y += HEIGHT_RES/3 ;
            c.setHsb(i * 64, 255, 255);
-           ofSetColor(c);
-           ofDrawRectangle(r);
+              ofSetColor(c);
+//           ofDrawRectangle(r);
+           line.scale(.5,.5);
+           line.setClosed(true);
+
+           line.draw();
+           
+
        }
     
 }
