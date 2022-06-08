@@ -36,6 +36,7 @@ void ofApp::setup(){
     
       vidGrabber.setVerbose(true);
     vidGrabber.listDevices();
+    vidGrabber.setDeviceID(1);
       vidGrabber.initGrabber(WIDTH_RES,HEIGHT_RES);
 
       colorImg.allocate(WIDTH_RES,HEIGHT_RES);
@@ -113,8 +114,10 @@ void ofApp::update(){
                bLearnBackground = false;
            }
            grayDiff.absDiff(grayBg, grayImage);
-           grayDiff.threshold(40);
-           contourFinder.findContours(grayDiff, 5, (340*240)/4, 4, false, true);
+           grayDiff.threshold(50);
+           grayDiff.erode();
+           contourFinder.findContours(grayDiff, 5, (WIDTH_RES*HEIGHT_RES)/3, 1, false, true);
+        
        }
     //end tut recognition
 }
@@ -147,10 +150,22 @@ void ofApp::draw(){
               ofSetColor(c);
 //           ofDrawRectangle(r);
            line.scale(.5,.5);
-           line.setClosed(true);
+          
+           ofPath path;
+             
+               for( int i = 0; i < line.getVertices().size(); i++) {
+                   if(i == 0) {
+                       path.newSubPath();
+                       path.moveTo(line.getVertices()[i] );
+                   } else {
+                       path.lineTo( line.getVertices()[i] );
+                   }
+               }
+             
+               path.close();
+              // path.simplify();
+           path.draw();
 
-           line.draw();
-           
 
        }
     
