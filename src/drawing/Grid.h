@@ -10,10 +10,13 @@
 
 #include <stdio.h>
 #include "../ofMain.h"
+#include "../music/chords.h"
+#include "./colors.h"
 
 using namespace std;
 
-#define GRID_SIZE 30
+#define COL_NUM 12
+#define ROW_NUM 5
 
 class Grid {
 public:
@@ -22,9 +25,15 @@ public:
     void setup();
     void update();
     void display();
-    
+    void updateDots(NoteData noteData[],int numberOfNotes);
+    void drawGrid();
+    void magnetone(NoteData noteData[],int numberOfNotes);
 private:
-    ofVec2f points[GRID_SIZE][GRID_SIZE];
+    ofVec2f points[ROW_NUM][COL_NUM];
+    
+    int sizes[ROW_NUM][COL_NUM];
+    ofVec2f pos_variation[ROW_NUM][COL_NUM];
+    ofColor colors[ROW_NUM][COL_NUM];
 };
 
 #endif /* Grid_hpp */

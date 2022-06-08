@@ -7,6 +7,7 @@
 #include "chords.h"
 #include "music/midilyzer.h"
 #include "drawing/Grid.h"
+#include "ofxOpenCv.h"
 
 #define MAX_NUM_OF_NOTES 1000
 
@@ -33,12 +34,19 @@ public:
     
     void newMidiMessage(ofxMidiMessage& eventArgs);
      
+    bool bLearnBackground;
+          ofVideoGrabber vidGrabber;
+          ofxCvColorImage colorImg;
+          ofxCvGrayscaleImage grayImage, grayBg, grayDiff;
+          ofxCvContourFinder contourFinder;
+    
 private:
     
     midiLyzer midi_analyzer;
     //Array that stores information for each note/circle being displayed
     NoteData noteData[MAX_NUM_OF_NOTES];
-    
+    NoteData noteOn[MAX_NUM_OF_NOTES];
+
     int onNotes; //numero delle note accese
     
     //Variable for storing the apps background colour
