@@ -7,7 +7,7 @@
 
 #include "midilyzer.h"
 
-void midiLyzer::analyze(NoteData noteData[],int numberOfNotes){
+void midiLyzer::analyze(NoteData noteData[],int numberOfNotes) {
     chord chord;
    
     sortNotes(noteData,numberOfNotes);

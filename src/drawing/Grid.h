@@ -19,6 +19,7 @@ using namespace std;
 #define ROW_NUM 5
 
 class Grid {
+
 public:
     Grid();
     ~Grid();
@@ -34,6 +35,7 @@ private:
     int sizes[ROW_NUM][COL_NUM];
     ofVec2f pos_variation[ROW_NUM][COL_NUM];
     ofColor colors[ROW_NUM][COL_NUM];
+    
 };
 
 #endif /* Grid_hpp */

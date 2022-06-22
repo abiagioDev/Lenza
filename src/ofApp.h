@@ -6,14 +6,12 @@
 #include <stdlib.h>
 #include "chords.h"
 #include "music/midilyzer.h"
+#include "music/midiCore.hpp"
 #include "drawing/Grid.h"
 #include "ofxOpenCv.h"
+#include "tracking/blobber.hpp"
 
-#define MAX_NUM_OF_NOTES 1000
-
-
-class ofApp : public ofBaseApp,
-public ofxMidiListener {
+class ofApp : public ofBaseApp {
     
 public:
     void setup();
@@ -32,37 +30,20 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
-    void newMidiMessage(ofxMidiMessage& eventArgs);
-     
-    bool bLearnBackground;
-          ofVideoGrabber vidGrabber;
-          ofxCvColorImage colorImg;
-          ofxCvGrayscaleImage grayImage, grayBg, grayDiff;
-          ofxCvContourFinder contourFinder;
-    
 private:
     
     midiLyzer midi_analyzer;
-    //Array that stores information for each note/circle being displayed
-    NoteData noteData[MAX_NUM_OF_NOTES];
-    NoteData noteOn[MAX_NUM_OF_NOTES];
-
-    int onNotes; //numero delle note accese
     
     //Variable for storing the apps background colour
     int backgroundColour;
-    
-    //Object that handles the MIDI input
-    ofxMidiIn midiIn;
     
     //Flag that sets whether we're currently displaying the apps instructions
     bool showingInstructions;
     
     int control;
-
+    
+    midiCore midiCore;
     Grid grid;
     ofShader shader;
-
-    
-    
+    blobber blobber;
 };

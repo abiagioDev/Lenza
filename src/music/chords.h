@@ -8,15 +8,13 @@
 #ifndef chords_h
 #define chords_h
 
-typedef enum
-{
+typedef enum {
     OFF,
     ON
 } NOTE_STATUS;
 
 
-typedef struct
-{
+typedef struct {
     int note_num;
     int note_vel;
     NOTE_STATUS status;
@@ -26,8 +24,7 @@ static int maj[7] = {0,4,7,11,2,6,9};
 //int min = [4,3,4];
 //int sev = [4,3,3];
 
-typedef enum
-{
+typedef enum {
     UNDEF,
     M_TRIAD,
     MIN_TRIAD,
@@ -43,7 +40,7 @@ typedef enum
     MIN_7MAJ,
 } CHORD_QUALITY;
 
-class chord{
+class chord {
 public:
     CHORD_QUALITY quality;
     int root;
